@@ -1,0 +1,33 @@
+---
+- name: Update New Relic APM agent on Windows hosts
+  hosts: windows
+  tasks:
+    - name: Stop IIS service
+      win_service:
+        name: w3svc
+        state: stopped
+
+    - name: Install New Relic agent
+      win_package:
+        path: '\\path\to\newrelic-agent-x64.msi'
+        state: present
+
+    - name: Update New Relic configuration file
+      win_xml:
+        path: 'C:\ProgramData\New Relic\.NET Agent\newrelic.config'
+        xpath: '/configuration/service/licenseKey'
+        value: 'YOUR_NEW_RELIC_LICENSE_KEY'
+        attribute: text
+
+    - name: Update New Relic application name
+      win_xml:
+        path: 'C:\ProgramData\New Relic\.NET Agent\newrelic.config'
+        xpath: '/configuration/application/name'
+        value: 'YourAppName'
+        attribute: text
+
+    - name: Start IIS service
+      win_service:
+        name: w3svc
+        state: started
+
