@@ -10,6 +10,14 @@
 *.env
 *.txt
 *.nenv
+ENV/
+env.bak/
+venv.bak/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
 
 # Node artifact files
 node_modules/
@@ -101,7 +109,39 @@ terraform.rc
 # NOT SURE IF WE NEED TO KEEP this in SOURCE CONTROL
 .terraform.lock.hcl
 
+# Azure specific
+bin
+obj
+csx
+.vs
+edge
+Publish
+
+*.user
+*.suo
+*.cscfg
+*.Cache
+project.lock.json
+
+/packages
+/TestResults
+
+/tools/NuGet.exe
+/App_Data
+/secrets
+/data
+.secrets
+appsettings.json
+local.settings.json
+
+node_modules
+dist
 *storage-account-keys*
+
+# Azurite artifacts
+__blobstorage__
+__queuestorage__
+__azurite_db*__.json
 
 # other
 test*.py
