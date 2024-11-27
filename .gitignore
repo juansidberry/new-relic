@@ -7,7 +7,7 @@
 *.venv/
 *venv/
 *.csv
-.env
+*.env
 *.txt
 *.nenv
 
@@ -105,3 +105,6 @@ terraform.rc
 
 # other
 test*.py
+
+# But do not ignore requirements.txt
+!requirements.txt
