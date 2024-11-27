@@ -1,6 +1,6 @@
 ## prompt:
 ```
-write a pythong program that will 
+write a python program that will 
 (1) Use the kafka-consumer-groups.sh command to describe the consumer group and extract the CONSUMER-ID.
 (2) Write a script to parse the consumer_group_status.txt file and extract the CONSUMER-ID values.
 (3) Use the New Relic API to send the extracted CONSUMER-ID values. You can use the New Relic Telemetry SDK or directly interact with the New Relic API.
