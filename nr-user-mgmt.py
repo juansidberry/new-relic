@@ -23,7 +23,7 @@ header = """
 def get_users_from_azure():
     # Create a credential object using the DefaultAzureCredential class
     credential    = DefaultAzureCredential()
-    group_id      = os.getenv('NR_AZ_GROUP_ID')
+    group_id      = '9436c231-56f9-4b31-a6c6-5784f54d80f3'
     ms_graph_base = "https://graph.microsoft.com"
     default_url   = f"{ms_graph_base}/.default"
     url           = f"{ms_graph_base}/v1.0/groups/{group_id}/members"

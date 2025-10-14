@@ -1,3 +1,7 @@
+"""
+  What: This script will list all resources in your New Relic account.
+  Why:  User can used outut files for local data analysis.
+"""
 import requests
 import json
 import os
@@ -429,7 +433,7 @@ def get_all_apm_agents():
     
     with open(output_file, 'w') as f:
         writer = csv.writer(f)
-        writer.writerow(["name","reporting","language","max_version","min_version","entityType","type","applicationId","guid"])
+        writer.writerow(["name","environment","reporting","language","max_version","min_version","entityType","type","applicationId","guid"])
         for agent in apm_agents:
             try:
                 reporting = f"{agent['reporting']}"
@@ -468,7 +472,7 @@ def get_all_apm_agents():
             # print(f"{version}")
             # print('-' * len(version))
 
-            writer.writerow([agent['name'],reporting,language,max_version,min_version,agent['entityType'],agent['type'],agent['applicationId'],agent['guid']])
+            writer.writerow([agent['name'],agent['environment'],reporting,language,max_version,min_version,agent['entityType'],agent['type'],agent['applicationId'],agent['guid']])
 
     print(f'\n\n\tPlease see the output file named "{output_file}"\n\n')
 
@@ -766,6 +770,62 @@ def get_all_notification_channels():
     print(f'\n\n\tPlease see the output file named "{output_file}"\n\n')
 
 
+def audit_existing_drop_rules():
+    # print("Action One selected. (Function not yet implemented)")
+    query = """
+{
+  actor {
+    account(id: %s) {
+      nrqlDropRules {
+        list {
+          rules {
+            id
+            nrql
+            accountId
+            action
+            createdBy
+            createdAt
+            description
+          }
+          error {
+            reason
+            description
+          }
+        }
+      }
+    }
+  }
+}
+""" % ACCOUNT_ID
+    
+    output_file = f'{TIMESTAMP}-drop-rules.csv'
+    results = []
+    cursor = None
+
+    if cursor:
+        query = query.replace('workflows', f'workflows(cursor: "{cursor}")')
+    
+    response = requests.post(URL, headers=HEADERS, json={'query': query})
+    return response.json()
+
+
+def show_menu():
+    # os.system("clear")
+    print("\n\n\nPlease choose an action:")
+    print(" 1. get_all_apm_agents")
+    print(" 2. get_all_dashboard_data")
+    print(" 3. get_all_infra_agents")
+    print(" 4. get_all_policies")
+    print(" 5. get_all_synthetic_monitors")
+    print(" 6. get_all_users")
+    print(" 7. get_all_notification_channels")
+    print(" 8. get_all_destinations")
+    print(" 9. get_all_workflows")
+    print("10. get_all_alert_conditions")
+    print("11. audit_existing_drop_rules")
+    print(" 0. Exit")
+
+
 def main():
     # get_all_apm_agents()
     # get_all_dashboard_data()
@@ -775,7 +835,7 @@ def main():
     # get_all_users()
     # get_all_notification_channels()
     # get_all_destinations()
-    get_all_workflows()
+    # get_all_workflows()
     # get_all_alert_conditions(get_all_policies())
     
     # apm_agents   = get_all_apm_agents()
@@ -786,6 +846,38 @@ def main():
     # users        = get_all_users()
     # destinations = get_all_destinations()
     # print(policies)
+
+    while True:
+        show_menu()
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            get_all_apm_agents()
+        elif choice == '2':
+            get_all_dashboard_data()
+        elif choice == '3':
+            get_all_infra_agents()
+        elif choice == '4':
+            get_all_policies()
+        elif choice == '5':
+            get_all_synthetic_monitors()
+        elif choice == '6':
+            get_all_users()
+        elif choice == '7':
+            get_all_notification_channels()
+        elif choice == '8':
+            get_all_destinations()
+        elif choice == '9':
+            get_all_workflows()
+        elif choice == '10':
+            get_all_alert_conditions()
+        elif choice == '11':
+            print(f"\n\t{audit_existing_drop_rules()}")
+        elif choice == '0':
+            print("Exiting the program.")
+            break
+        else:
+            print("Invalid choice. Please try again.")
 
 if __name__ == '__main__':
     main()
