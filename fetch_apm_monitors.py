@@ -18,6 +18,41 @@ URL          = 'https://api.newrelic.com/graphql'
 TIMESTAMP    = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 OUTPUT_FILE_NAME = 'apm-monitors'
 
+
+# def get_environment(entityname):
+#     entity_name = entityname.lower()
+#     environment = ''
+#     environment_names = (
+#         'prd', 'prod', 
+#         'stg', 'stage', 
+#         'qa', 'dev')
+#     for environment_name in environment_names:
+#         if environment_name in entity_name:
+#             if environment_name.startswith('p'):
+#                 environment = 'prd'
+#             elif environment_name.startswith('s'):
+#                 environment = 'stg'
+#             elif environment_name.startswith('q'):
+#                 environment = 'qa'
+#             elif environment_name.startswith('d'):
+#                 environment = 'dev'
+#         else:
+#             environment = 'other'
+#     print(f"{environment}\t{entity_name}")
+#     return environment
+def get_environment(name):
+    name_lower = name.lower()
+    if 'prod' in name_lower or 'prd' in name_lower:
+        return 'prd'
+    elif 'stage' in name_lower or 'stg' in name_lower:
+        return 'stg'
+    elif 'qa' in name_lower:
+        return 'qa'
+    elif 'dev' in name_lower:
+        return 'dev'
+    else:
+        return 'other'
+
 # loop through the results and print the name of each monitor
 def print_monitor_names(monitors, search_term):
   results = []
@@ -85,7 +120,7 @@ def get_apm_application_data():
     data = json.loads(json.dumps(response.json()))
 
     for row in data['data']['actor']['entitySearch']['results']['entities']:
-        
+        row['environment'] = get_environment(row['name'])
         monitors.append(row)
 
     return monitors
