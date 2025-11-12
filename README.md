@@ -1,4 +1,4 @@
-## prompt:
+## notes:
 ```
 write a python program that will 
 (1) Use the kafka-consumer-groups.sh command to describe the consumer group and extract the CONSUMER-ID.
